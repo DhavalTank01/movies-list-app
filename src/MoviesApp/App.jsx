@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Alert from "../Components/SimpleAlert";
+import Movie from "./Movie";
+import TabelHader from "./TabelHader";
+import Title from "./Title";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -47,6 +50,15 @@ const App = () => {
     [movies]
   );
 
+  const titles = [
+    "id",
+    "title",
+    "genre",
+    "numberInStock",
+    "dailyRentalRate",
+    "action",
+  ];
+
   return (
     <>
       {alert.isShow && (
@@ -60,57 +72,28 @@ const App = () => {
         <p className="text-center  text-uppercase  h2">all movies list</p>
 
         {movies.length === 0 ? (
-          <p className="fs-4 text-capitalize border border-1 border-top-0 border-end-0 border-start-0">
-            there are no movies in the database
-          </p>
+          <Title title={"there are no movies in the database"} />
         ) : (
           <>
-            <p className="fs-4 text-capitalize border border-1 border-top-0 border-end-0 border-start-0">
-              showing {movies.length} movies in the database
-            </p>
+            <Title title={`showing ${movies.length} movies in the database`} />
 
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">
-                    <span className="text-capitalize">#</span>
-                  </th>
-                  <th scope="col">
-                    <span className="text-capitalize">title</span>
-                  </th>
-                  <th scope="col">
-                    <span className="text-capitalize">genre</span>
-                  </th>
-                  <th scope="col">
-                    <span className="text-capitalize">numberInStock</span>
-                  </th>
-                  <th scope="col">
-                    <span className="text-capitalize">dailyRentalRate</span>
-                  </th>
-                  <th scope="col">
-                    <span className="text-capitalize">action</span>
-                  </th>
+                  {titles.map((item, id) => {
+                    return <TabelHader key={id} id={id} item={item} />;
+                  })}
                 </tr>
               </thead>
               <tbody>
                 {movies.map((item, id) => {
-                  const { genre, numberInStock, title, dailyRentalRate } = item;
                   return (
-                    <tr key={id}>
-                      <th scope="row">{id + 1}</th>
-                      <td>{title}</td>
-                      <td>{genre.name}</td>
-                      <td>{numberInStock}</td>
-                      <td>{dailyRentalRate}</td>
-                      <td>
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => handelDelete(item)}
-                        >
-                          <i className="fa-solid fa-trash-can"></i>
-                        </button>
-                      </td>
-                    </tr>
+                    <Movie
+                      item={item}
+                      key={id}
+                      handelDelete={handelDelete}
+                      id={id}
+                    />
                   );
                 })}
               </tbody>
