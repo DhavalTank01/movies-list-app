@@ -4,6 +4,7 @@ import Alert from "../Components/SimpleAlert";
 import Movie from "./Movie";
 import TabelHader from "./TabelHader";
 import Title from "./Title";
+import Navbar from "./Navbar";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -56,9 +57,23 @@ const App = () => {
     "genre",
     "numberInStock",
     "dailyRentalRate",
+    "liked",
     "action",
   ];
+  const handelClick = useCallback(
+    (item) => {
+      const list = movies.filter((cele) => {
+        if (cele === item) {
+          cele.liked = !cele.liked;
+          return cele;
+        }
+        return cele;
+      });
 
+      setMovies(list);
+    },
+    [movies]
+  );
   return (
     <>
       {alert.isShow && (
@@ -69,8 +84,7 @@ const App = () => {
         ></Alert>
       )}
       <div className="m-3">
-        <p className="text-center  text-uppercase  h2">all movies list</p>
-
+        <Navbar />
         {movies.length === 0 ? (
           <Title title={"there are no movies in the database"} />
         ) : (
@@ -93,6 +107,7 @@ const App = () => {
                       key={id}
                       handelDelete={handelDelete}
                       id={id}
+                      handelClick={handelClick}
                     />
                   );
                 })}
